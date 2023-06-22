@@ -32,21 +32,12 @@ const TabularView = ({ content }) => (
                 <FormattedMessage id="Title" defaultMessage="Title" />
               </Table.HeaderCell>
               <Table.HeaderCell>
-                <FormattedMessage
-                  id="Description"
-                  defaultMessage="Description"
-                />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
                 <FormattedMessage id="Type" defaultMessage="Type" />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <FormattedMessage id="State" defaultMessage="State" />
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {content.items.map((item) => (
+            {content.items.map((item) => item['@type'] != 'Image' && (
               <Table.Row key={item.url}>
                 <Table.Cell>
                   <UniversalLink
@@ -57,9 +48,7 @@ const TabularView = ({ content }) => (
                     {item.title}
                   </UniversalLink>
                 </Table.Cell>
-                <Table.Cell>{item.description}</Table.Cell>
                 <Table.Cell>{item['@type']}</Table.Cell>
-                <Table.Cell>{item.review_state}</Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

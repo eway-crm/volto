@@ -149,7 +149,9 @@ export function getContent(
           b_start: settings.defaultPageSize * (page - 1),
           b_size: settings.defaultPageSize,
         }
-      : {},
+      : {
+        b_size: settings.defaultPageSize
+      },
     settings.isMultilingual ? { expand: 'translations' } : {},
   );
 

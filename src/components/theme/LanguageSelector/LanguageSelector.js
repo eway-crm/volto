@@ -5,11 +5,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, Redirect } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { find, map } from 'lodash';
+import qs from 'query-string';
 
 import {
   Helmet,
@@ -38,10 +39,21 @@ const LanguageSelector = (props) => {
 
   const { settings } = config;
 
+  const search = qs.parse(useLocation().search);
   return settings.isMultilingual ? (
     <div className="language-selector">
       {map(settings.supportedLanguages, (lang) => {
         const translation = find(translations, { language: lang });
+
+        if (
+          translation &&
+          search['set_language'] &&
+          search['set_language'] !== currentLang &&
+          search['set_language'] === toReactIntlLang(lang)
+        ) {
+          return <Redirect to={flattenToAppURL(translation['@id'])} />
+        }
+
         return (
           <Link
             aria-label={`${intl.formatMessage(

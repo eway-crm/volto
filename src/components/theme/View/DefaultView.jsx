@@ -18,7 +18,7 @@ import { getSchema } from '@plone/volto/actions';
 import { getWidget } from '@plone/volto/helpers/Widget/utils';
 import RenderBlocks from './RenderBlocks';
 
-import { hasBlocksData, getBaseUrl } from '@plone/volto/helpers';
+import { hasBlocksData, getBaseUrl, flattenHTMLToAppURL } from '@plone/volto/helpers';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { isEqual } from 'lodash';
@@ -73,7 +73,26 @@ const DefaultView = (props) => {
       </Container>
     ) : (
       <Container id="page-document">
-        {fieldsets?.map((fs) => {
+        {content.text && (
+          <Container className="view-wrapper">
+            <article id="content">
+              <header>
+                <h1 className="documentFirstHeading">{content.title}</h1>
+                {content.description && (
+                  <p className="documentDescription">{content.description}</p>
+                )}
+              </header>
+              <section id="content-core">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: flattenHTMLToAppURL(content.text.data),
+                  }}
+                />
+              </section>
+            </article>
+          </Container>
+        )}
+        {!content.text && fieldsets?.map((fs) => {
           return (
             <div className="fieldset" key={fs.id}>
               {fs.id !== 'default' && <h2>{fs.title}</h2>}

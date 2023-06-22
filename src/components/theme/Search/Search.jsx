@@ -106,10 +106,11 @@ class Search extends Component {
    */
 
   doSearch = () => {
+    const { settings } = config;
     const options = qs.parse(this.props.history.location.search);
     this.setState({ currentPage: 1 });
     options['use_site_search_settings'] = 1;
-    this.props.searchContent('', options);
+    this.props.searchContent(settings.isMultilingual ? this.props.intl.locale : '', options);
   };
 
   handleQueryPaginationChange = (e, { activePage }) => {
@@ -119,10 +120,11 @@ class Search extends Component {
     options['use_site_search_settings'] = 1;
 
     this.setState({ currentPage: activePage }, () => {
-      this.props.searchContent('', {
+      this.props.searchContent(settings.isMultilingual ? this.props.intl.locale : '', {
         ...options,
-        b_start: (this.state.currentPage - 1) * settings.defaultPageSize,
-      });
+        b_start: (this.state.currentPage - 1) * settings.searchPageSize,
+        b_size: settings.searchPageSize
+      });   
     });
   };
 
@@ -282,7 +284,7 @@ class Search extends Component {
                   <Pagination
                     activePage={this.state.currentPage}
                     totalPages={Math.ceil(
-                      this.props.search.items_total / settings.defaultPageSize,
+                      this.props.search.items_total / settings.searchPageSize,
                     )}
                     onPageChange={this.handleQueryPaginationChange}
                     firstItem={null}
@@ -348,13 +350,18 @@ export default compose(
   asyncConnect([
     {
       key: 'search',
-      promise: ({ location, store: { dispatch } }) =>
-        dispatch(
-          searchContent('', {
+      promise: ({ location, store: { dispatch, getState } }) =>
+      {
+        const { settings } = config;
+        const currentLang = settings.isMultilingual ? getState().intl.locale : '';
+        
+        return dispatch(
+          searchContent(currentLang, {
             ...qs.parse(location.search),
             use_site_search_settings: 1,
           }),
-        ),
+        );
+      },
     },
   ]),
 )(Search);

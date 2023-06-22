@@ -4,19 +4,32 @@
  */
 
 import React from 'react';
-import { Container, List, Segment } from 'semantic-ui-react';
-import { map } from 'lodash';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
-import { useSelector, shallowEqual } from 'react-redux';
-import { UniversalLink } from '@plone/volto/components';
-import { flattenToAppURL, addAppURL } from '@plone/volto/helpers';
+import { injectIntl } from 'react-intl';
 
-const messages = defineMessages({
-  copyright: {
-    id: 'Copyright',
-    defaultMessage: 'Copyright',
-  },
-});
+const TAWKTO_TEMPLATE_CS = `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+ (function(){
+ var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+ s1.async=true;
+ s1.src='https://embed.tawk.to/59e7276f4854b82732ff63d6/1bsogr4gc';
+ s1.charset='UTF-8';
+ s1.setAttribute('crossorigin','*');
+ s0.parentNode.insertBefore(s1,s0);
+ })();`;
+
+ const TAWKTO_TEMPLATE_EN = `var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+ (function(){
+ var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+ s1.async=true;
+ s1.src='https://embed.tawk.to/618594316bb0760a494157e6/1fjoslol8';
+ s1.charset='UTF-8';
+ s1.setAttribute('crossorigin','*');
+ s0.parentNode.insertBefore(s1,s0);
+ })();`;
+
+const GA4 = `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-CNK4S6L6G7');`;
 
 /**
  * Component to display the footer.
@@ -25,94 +38,17 @@ const messages = defineMessages({
  * @returns {string} Markup of the component
  */
 const Footer = ({ intl }) => {
-  const { siteActions = [] } = useSelector(
-    (state) => ({
-      siteActions: state.actions?.actions?.site_actions,
-    }),
-    shallowEqual,
-  );
 
   return (
-    <Segment
-      role="contentinfo"
-      vertical
-      padded
-      inverted
-      color="grey"
-      textAlign="center"
-      id="footer"
-    >
-      <Container>
-        <Segment basic inverted color="grey" className="discreet">
-          <FormattedMessage
-            id="The {plonecms} is {copyright} 2000-{current_year} by the {plonefoundation} and friends."
-            defaultMessage="The {plonecms} is {copyright} 2000-{current_year} by the {plonefoundation} and friends."
-            values={{
-              plonecms: (
-                <FormattedMessage
-                  id="Plone{reg} Open Source CMS/WCM"
-                  defaultMessage="Plone{reg} Open Source CMS/WCM"
-                  values={{ reg: <sup>®</sup> }}
-                />
-              ),
-              copyright: (
-                <abbr title={intl.formatMessage(messages.copyright)}>©</abbr>
-              ),
-              current_year: new Date().getFullYear(),
-              plonefoundation: (
-                <a className="item" href="http://plone.org/foundation">
-                  <FormattedMessage
-                    id="Plone Foundation"
-                    defaultMessage="Plone Foundation"
-                  />
-                </a>
-              ),
-            }}
-          />{' '}
-          <FormattedMessage
-            id="Distributed under the {license}."
-            defaultMessage="Distributed under the {license}."
-            values={{
-              license: (
-                <a
-                  className="item"
-                  href="http://creativecommons.org/licenses/GPL/2.0/"
-                >
-                  <FormattedMessage
-                    id="GNU GPL license"
-                    defaultMessage="GNU GPL license"
-                  />
-                </a>
-              ),
-            }}
-          />
-        </Segment>
-        <List horizontal inverted>
-          {siteActions?.length
-            ? map(siteActions, (item) => (
-                <div role="listitem" className="item" key={item.id}>
-                  <UniversalLink
-                    className="item"
-                    href={
-                      item.url ? flattenToAppURL(item.url) : addAppURL(item.id)
-                    }
-                  >
-                    {item?.title}
-                  </UniversalLink>
-                </div>
-              ))
-            : null}
-          <div role="listitem" className="item">
-            <a className="item" href="https://plone.org">
-              <FormattedMessage
-                id="Powered by Plone & Python"
-                defaultMessage="Powered by Plone & Python"
-              />
-            </a>
-          </div>
-        </List>
-      </Container>
-    </Segment>
+    <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: intl.locale === 'cs' ? TAWKTO_TEMPLATE_CS : TAWKTO_TEMPLATE_EN,
+        }}
+      />
+      <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-CNK4S6L6G7" />
+      <script dangerouslySetInnerHTML={{ __html: GA4 }} />
+    </>
   );
 };
 

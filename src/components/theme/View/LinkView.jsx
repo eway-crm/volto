@@ -43,7 +43,7 @@ class LinkView extends Component {
 
   componentDidMount() {
     if (!this.props.token) {
-      const { remoteUrl } = this.props.content;
+      const remoteUrl = this.fixUrl(this.props.content.remoteUrl);
       if (isInternalURL(remoteUrl)) {
         this.props.history.replace(flattenToAppURL(remoteUrl));
       } else if (!__SERVER__) {
@@ -52,14 +52,20 @@ class LinkView extends Component {
     }
   }
 
+  fixUrl(remoteUrl) {
+    // Fix resolveuid links
+    return String(remoteUrl)?.replace("${portal_url}/", '/');
+  }
+
   /**
    * Render method.
    * @method render
    * @returns {string} Markup for the component.
    */
   render() {
-    const { remoteUrl } = this.props.content;
+    const remoteUrl = this.fixUrl(this.props.content.remoteUrl);
     const { openExternalLinkInNewTab } = config.settings;
+
     return (
       <Container id="page-document">
         <h1 className="documentFirstHeading">{this.props.content.title}</h1>

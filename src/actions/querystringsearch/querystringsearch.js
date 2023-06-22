@@ -34,12 +34,12 @@ export function getQueryStringResults(path, data, subrequest, page) {
   const query = {
     ...requestData,
     ...(!requestData.b_size && {
-      b_size: settings.defaultPageSize,
+      b_size: settings.searchPageSize,
     }),
     ...(page && {
       b_start: requestData.b_size
         ? data.b_size * (page - 1)
-        : settings.defaultPageSize * (page - 1),
+        : settings.searchPageSize * (page - 1),
     }),
     query: requestData?.query,
   };
