@@ -239,7 +239,7 @@ server.get('/*', (req, res) => {
         : store.getState().content.data?.language?.token ||
           config.settings.defaultLanguage;
 
-      if (toBackendLang(initialLang) !== contentLang) {
+      if (toBackendLang(initialLang) !== contentLang && url !== '/') {
         const newLang = toReactIntlLang(
           new locale.Locales(contentLang).best(supported).toString(),
         );
@@ -262,6 +262,15 @@ server.get('/*', (req, res) => {
 
       const readCriticalCss =
         config.settings.serverConfig.readCriticalCss || defaultReadCriticalCss;
+
+      // If we are showing an "old browser" warning,
+      // make sure it doesn't get cached in a shared cache
+      const browserdetect = store.getState().browserdetect;
+      if (config.settings.notSupportedBrowsers.includes(browserdetect?.name)) {
+        res.set({
+          'Cache-Control': 'private',
+        });
+      }
 
       if (context.url) {
         res.redirect(flattenToAppURL(context.url));

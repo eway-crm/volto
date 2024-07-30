@@ -183,6 +183,9 @@ let config = {
     hashLinkSmoothScroll: false,
     styleClassNameExtenders,
     querystringSearchGet: false,
+    blockSettingsTabFieldsetsInitialStateOpen: true,
+    excludeLinksAndReferencesMenuItem: true,
+    containerBlockTypes: [],
   },
   experimental: {
     addBlockButton: {

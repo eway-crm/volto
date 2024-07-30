@@ -58,6 +58,7 @@ export {
   buildStyleClassNamesFromData,
   buildStyleClassNamesExtenders,
   getPreviousNextBlock,
+  findBlocks,
 } from '@plone/volto/helpers/Blocks/Blocks';
 export { default as BodyClass } from '@plone/volto/helpers/BodyClass/BodyClass';
 export { default as ScrollToTop } from '@plone/volto/helpers/ScrollToTop/ScrollToTop';
@@ -74,6 +75,7 @@ export { default as langmap } from './LanguageMap/LanguageMap';
 export { default as Helmet } from './Helmet/Helmet';
 export { default as FormValidation } from './FormValidation/FormValidation';
 export { validateFileUploadSize } from './FormValidation/FormValidation';
+export { tryParseJSON } from './FormValidation/FormValidation';
 export {
   difference,
   getColor,
@@ -91,6 +93,7 @@ export {
   replaceItemOfArray,
   cloneDeepSchema,
   reorderArray,
+  slugify,
 } from '@plone/volto/helpers/Utils/Utils';
 export { messages } from './MessageLabels/MessageLabels';
 export {

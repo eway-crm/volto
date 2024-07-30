@@ -1,7 +1,14 @@
 import express from 'express';
 import { getAPIResourceWithAuth } from '@plone/volto/helpers';
 
-const HEADERS = ['content-type', 'content-disposition', 'cache-control'];
+const HEADERS = [
+  'content-type',
+  'content-disposition',
+  'cache-control',
+  'x-sendfile',
+  'x-accel-redirect',
+  'x-robots-tag',
+];
 
 function imageMiddlewareFn(req, res, next) {
   getAPIResourceWithAuth(req)
