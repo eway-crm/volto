@@ -21,6 +21,23 @@ const ploneAuthObj = {
   pass: ploneAuth[1],
 };
 
+// --- isInViewport ----------------------------------------------------------
+Cypress.Commands.add('isInViewport', (element) => {
+  cy.get(element).then(($el) => {
+    const windowInnerWidth = Cypress.config(`viewportWidth`);
+    const windowInnerHeight = Cypress.config(`viewportHeight`);
+    const rect = $el[0].getBoundingClientRect();
+
+    const rightBoundOfWindow = windowInnerWidth;
+    const bottomBoundOfWindow = windowInnerHeight;
+
+    expect(rect.top).to.be.at.least(0);
+    expect(rect.left).to.be.at.least(0);
+    expect(rect.right).to.be.lessThan(rightBoundOfWindow);
+    expect(rect.bottom).to.be.lessThan(bottomBoundOfWindow);
+  });
+});
+
 // --- AUTOLOGIN -------------------------------------------------------------
 Cypress.Commands.add('autologin', (usr, pass) => {
   let api_url, user, password;
@@ -848,4 +865,24 @@ Cypress.Commands.add('getTableSlate', (header = false) => {
     },
   );
   return slate;
+});
+
+Cypress.Commands.add('configureListingWith', (contentType) => {
+  cy.get('.sidebar-container .tabs-wrapper .menu .item')
+    .contains('Block')
+    .click();
+  cy.get('.querystring-widget .fields').contains('Add criteria').click();
+  cy.get(
+    '.querystring-widget .fields:first-of-type .field:first-of-type .react-select__menu .react-select__option',
+  )
+    .contains('Type')
+    .click();
+
+  //insert Page
+  cy.get('.querystring-widget .fields:first-of-type > .field').click();
+  cy.get(
+    '.querystring-widget .fields:first-of-type > .field .react-select__menu .react-select__option',
+  )
+    .contains(contentType)
+    .click();
 });

@@ -6,8 +6,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { UniversalLink } from '@plone/volto/components';
-import { Container, Table } from 'semantic-ui-react';
+import { Container as SemanticContainer, Table } from 'semantic-ui-react';
 import { FormattedMessage } from 'react-intl';
+import config from '@plone/volto/registry';
 
 /**
  * Tabular view component class.
@@ -15,7 +16,11 @@ import { FormattedMessage } from 'react-intl';
  * @param {Object} content Content object.
  * @returns {string} Markup of the component.
  */
-const TabularView = ({ content }) => (
+const TabularView = ({ content }) => {
+  const Container =
+    config.getComponent({ name: 'Container' }).component || SemanticContainer;
+
+  return (
   <Container className="view-wrapper">
     <article id="content">
       <header>
@@ -56,7 +61,8 @@ const TabularView = ({ content }) => (
       </section>
     </article>
   </Container>
-);
+  );
+};
 
 /**
  * Property types.
